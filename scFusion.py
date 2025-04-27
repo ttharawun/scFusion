@@ -28,14 +28,20 @@ group4 = parser4.add_argument_group('Required parameters')
 group4.add_argument("-d", "--GenomeDir", help='The path of folder saving the generated files [GENOMEDIR].')
 group4.add_argument("-g", "--Genome", help='The reference file (*.fasta or *.fa).')
 group4.add_argument("-a", "--Annotation", help='The gtf annotation file (*.gtf).')
-parser5 = subparsers.add_parser('ReadMapping', help='Mapping pair-end reads using STAR.', add_help=False)
+# Tint Updated for Mapping Script 
+parser5 = subparsers.add_parser('ReadMapping', help='Map paired-end reads using STAR, attach cell barcodes to fusion reads, and merge gene counts for single-cell data.', add_help=False)
+# Create groups
 group51 = parser5.add_argument_group('Required parameters')
 group52 = parser5.add_argument_group('Optional parameters')
+# Required parameters
 group51.add_argument("-f", "--FileDir", help='The folder of input data.')
 group51.add_argument("-b", "--Begin", help='The first index of input files.')
 group51.add_argument("-e", "--End", help='The last index of input files.')
 group51.add_argument("-s", "--STARIndex", help='The STAR index folder.')
 group51.add_argument("-o", "--OutDir", help='The output folder of the results and temporal files.')
+group51.add_argument("-g", "--GTF", help='Path to the GTF annotation file.')  # <--- new
+group51.add_argument("-w", "--WhiteList", help='Path to the cell barcode whitelist file.')  # <--- new
+# Optional parameters
 group52.add_argument("-t", "--Thread", default='8', help='Number of threads can be used, default is 8')
 parser6 = subparsers.add_parser('ReadProcessing', help='Process the chimeric reads.', add_help=False)
 group61 = parser6.add_argument_group('Required parameters')
@@ -159,14 +165,15 @@ if sys.argv[1] == 'Index':
     else:
         print('ERROR!!!!!')
 
+# Tint Updated for Mapping Script 
 if sys.argv[1] == 'ReadMapping':
-    if not args.FileDir or not args.OutDir or not args.Begin or not args.End or not args.STARIndex:
+    if not args.FileDir or not args.OutDir or not args.Begin or not args.End or not args.STARIndex or not args.GTF or not args.WhiteList:
         parser5.print_help()
         print('Please specify all required parameters!')
         exit()
-    aa = os.system(
-        'sh ' + programdir + '/bin/StarMapping_Chimeric.sh ' + args.FileDir + ' ' + args.Begin + ' ' + args.End + ' ' + args.OutDir +
-        'STARMapping/ ' + args.STARIndex + ' ' + args.Thread)
+    aa = os.system('sh ' + programdir + '/bin/StarMapping_Chimeric.sh ' + args.FileDir + ' ' + args.Begin + ' ' + 
+        args.End + ' ' + args.OutDir + ' ' + programdir + '/STARMapping/ ' + args.STARIndex + ' ' + 
+        args.Thread + ' ' + args.GTF + ' ' + args.WhiteList)
     if aa == 0:
         print('Finish mapping! Index: ' + args.Begin + ' ~ ' + args.End)
     else:
@@ -215,6 +222,7 @@ if sys.argv[1] == 'Retrain':
     else:
         print('ERROR!!!!!')
 
+# Tint Updated for Seurat Annotate
 if sys.argv[1] == 'ArtifactScoring':
     if not args.OutDir or not args.Begin or not args.End or not args.GenomeDir:
         parser9.print_help()
