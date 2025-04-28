@@ -12,10 +12,6 @@ gtf=$7              # GTF annotation file
 whitelist=$8        # Whitelist file
 codedir=$9          # Path to the directory containing AddCellBarcodeToChimeric.py
 
-# === Initialize Combined Counts ===
-output_counts="${outdir}/combined_counts.txt"
-echo -e "GeneID" > $output_counts
-
 # === Main Loop ===
 for ((i=${mystart}; i<=${myend}; i++))
 do
@@ -53,9 +49,6 @@ do
             --chimNonchimScoreDropMin 10 \
             --peOverlapMMp 0.1 \
             > ${outdir}/${i}/STAR_mapping.log 2>&1   # save STAR run log
-
-        # === Update combined gene counts ===
-        cut -f 1,2 ${outdir}/${i}/ReadsPerGene.out.tab | sed '1d' >> $output_counts
 
         # === Attach CB tag to Chimeric.out.sam ===
         bam_file="${outdir}/${i}/Aligned.sortedByCoord.out.bam"
