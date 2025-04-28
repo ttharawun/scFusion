@@ -171,7 +171,7 @@ if sys.argv[1] == 'ReadMapping':
         parser5.print_help()
         print('Please specify all required parameters!')
         exit()
-    aa = os.system('sh ' + programdir + '/bin/StarMapping_Chimeric.sh ' + args.FileDir + ' ' + args.Begin + ' ' + 
+    aa = os.system('bash ' + programdir + '/bin/StarMapping_Chimeric.sh ' + args.FileDir + ' ' + args.Begin + ' ' + 
         args.End + ' ' + args.OutDir + ' ' + programdir + '/STARMapping/ ' + args.STARIndex + ' ' + 
         args.Thread + ' ' + args.GTF + ' ' + args.WhiteList)
     if aa == 0:
