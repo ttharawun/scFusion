@@ -23,18 +23,20 @@ for readinfo in ChimericRead_info:
     try:
         MergePoint = int(readinfo_split[1])
     except:
-        sys.stderr.write(readinfo + '\n')  # add newline for readability
-        continue  # <=== VERY IMPORTANT to skip bad lines
-    read_new = read[0:MergePoint] + 'H' + read[MergePoint:]
+        sys.stderr.write(readinfo)
+    read_new = read[0:MergePoint]+'H'+read[MergePoint:]
+    # read_new = read
     Point = np.zeros(60)
     Point[MergePoint-1] = 1
     Point[MergePoint] = 1
     if 'N' not in read_new:
         ChimericRead.append(read_new)
-        read_new_inv = read_new.replace('A', '5').replace('T', '6').replace('C', '7').replace('G', '8')
+        read_new_inv = read_new.replace('A','5').replace('T','6').replace('C','7').replace('G','8')
         read_new_inv = read_new_inv[::-1]
-        read_new_inv = read_new_inv.replace('5', 'T').replace('6', 'A').replace('7', 'G').replace('8', 'C')
+        read_new_inv = read_new_inv.replace('5','T').replace('6','A').replace('7','G').replace('8','C')
         ChimericRead.append(read_new_inv)
+        # ChimericPoint.append(Point)
+    # print(Cont)
     Cont = Cont + 1
 ########################################################################################################################
 with open(FakeChimericFile,'r') as f:
@@ -46,26 +48,27 @@ ManmadeRead =[]
 # ManmadePoint=[]
 Cont = 1
 for readinfo in ManmadeRead_info:
-    if not readinfo.strip():  # Skip empty lines
-        continue
     readinfo_split = readinfo.split('\t')
     read = readinfo_split[0]
     try:
         MergePoint = int(readinfo_split[1])
     except:
-        sys.stderr.write(readinfo + '\n')
-        continue   # <=== THIS IS MISSING
+        sys.stderr.write(readinfo)
     read_new = read[0:MergePoint]+'H'+read[MergePoint:]
+    # read_new = read
     Point = np.zeros(61)
     Point[MergePoint-1] = 1
     Point[MergePoint] = 1
 
     if 'N' not in read_new:
         ManmadeRead.append(read_new)
-        read_new_inv = read_new.replace('A', '5').replace('T', '6').replace('C', '7').replace('G', '8')
+        read_new_inv = read_new.replace('A','5').replace('T','6').replace('C','7').replace('G','8')
         read_new_inv = read_new_inv[::-1]
-        read_new_inv = read_new_inv.replace('5', 'T').replace('6', 'A').replace('7', 'G').replace('8', 'C')
+        read_new_inv = read_new_inv.replace('5','T').replace('6','A').replace('7','G').replace('8','C') 
         ManmadeRead.append(read_new_inv)
+        # ManmadePoint.append(Point)
+
+    # print(Cont)
     Cont = Cont + 1
 ########################################################################################################################
 
@@ -104,6 +107,7 @@ LIST = list(range(Good_for_Tst.shape[0]))
 np.random.shuffle(LIST)
 Good_for_Tst = Good_for_Tst[LIST,:,:]
 Simu_for_Tst = Simu_for_Tst[LIST,:,:]
+    
 
 np.save(Outdir + '/Good_for_Tra.npy',Good_for_Tra)
 np.save(Outdir + '/Simu_for_Tra.npy',Simu_for_Tra)
@@ -112,8 +116,3 @@ np.save(Outdir + '/Good_for_Tst.npy',Good_for_Tst)
 np.save(Outdir + '/Simu_for_Tst.npy',Simu_for_Tst)
 
 ########################################################################################################################
-
-
-
-
-

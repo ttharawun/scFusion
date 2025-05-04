@@ -14,7 +14,7 @@ mkdir -p ${FilePath}/Expr/
 
 for ((i=${mystart};i<=${myend};i++))
 do
-	file=`ls ${FilePath}/${i}/humanChimeric_annotated.out.sam`
+	file=`ls ${FilePath}/STARMapping/${i}/humanChimeric_annotated.out.sam`
 	if [[ -n ${file} ]]; then
 		python ${codedir}/RmLowMappibility_ChimericRead.py ${file} ${FilePath}/ChimericOut/${i}.sam ${mappabilityfile} 1
 	fi
@@ -22,4 +22,4 @@ done
 
 bash ${codedir}/Annotate.sh ${FilePath}/ChimericOut/ ${mystart} ${myend} ${gtffile} ${codedir}
 bash ${codedir}/FindFusionSupport.sh ${FilePath}/ChimericOut/ ${mystart} ${myend} ${codedir}
-bash ${codedir}/CalcRPKM.sh ${exonfile} ${FilePath}/ ${FilePath}/Expr/ ${mystart} ${myend}
+bash ${codedir}/CalcRPKM.sh ${exonfile} ${FilePath}/STARMapping ${FilePath}/Expr/ ${mystart} ${myend}

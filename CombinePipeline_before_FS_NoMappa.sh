@@ -12,7 +12,7 @@ mkdir -p ${FilePath}/Expr/
 
 for ((i=${mystart};i<=${myend};i++))
 do
-	file=`ls ${FilePath}/${i}/humanChimeric_annotated.out.sam`
+	file=`ls ${FilePath}/STARMapping/${i}/humanChimeric_annotated.out.sam`
 	if [[ -n ${file} ]]; then
 		python ${codedir}/RmLowMappibility_ChimericRead_NoFilter.py ${file} ${FilePath}/ChimericOut/${i}.sam
 	fi

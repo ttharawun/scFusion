@@ -3,6 +3,9 @@ import sys
 # ***** readme *****
 # This code analyses softclipping to find encompassing reads and split reads for one sam file
 
+
+
+
 def ReverseComplement(str):
     return str[::-1].replace('A', 't').replace('T', 'a').replace('G', 'c').replace('C', 'g').upper()
 
@@ -177,23 +180,20 @@ lastname = ''
 lines = []
 badreadname = ''
 thisname = 'hgfhfrjfjzjbest1122gh'
-
 with infile:
     for line in infile:
-        if len(line.strip()) == 0:
-            continue
-        if line[0] == '#':
-            continue
-        info = line.strip().split('\t')
-        if len(info) == 0:
-            continue
-        thisname = info[1]
+        if len(line) > 0:
+            if line[0] == '#':
+                continue
+        info = line.split('\t')
+        if len(line) > 0:
+            thisname = info[1]
         if thisname == badreadname:
             continue
         if thisname == lastname:
             lines.append(line)
         else:
-            aa = TakeoutFusionSupport(lines)  # main procedure to record fusion.
+            aa = TakeoutFusionSupport(lines)  # mean procedure to record fusion.
             if len(aa) > 1:
                 lastname = aa
             else:
@@ -203,18 +203,16 @@ with infile:
             badreadname = info[1]
             lastname = ''
             lines = []
-
 aa = TakeoutFusionSupport(lines)
-
 for key in geneset:
     outfile.write(key + '\t' + str(geneset[key][0]) + '\t' + str(geneset[key][1]) + '\t' + geneset[key][3][0] + '\t' + geneset[key][3][1] + '\t')
     posstr = []
     for i in geneset[key][2]:
+        # posstr.append(str(i[0]) + ',' + str(i[1]) + '+' + str(i[2]) + '+' + str(i[3]) + ',' + str(i[4]) + '+' + str(i[5]) + ',' + str(i[6]) + ';')
         posstr.append(str(i[0]) + ',' + str(i[1]) + '+' + str(i[2]) + '+' + str(i[3]) + ',' + str(i[4]) + ';')
     posstr = set(posstr)
     for i in posstr:
         outfile.write(i)
     outfile.write('\n')
-
 infile.close()
 outfile.close()
