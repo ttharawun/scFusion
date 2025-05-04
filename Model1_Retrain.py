@@ -7,7 +7,7 @@ Created on Mon Sep  2 21:38:29 2019
 
 
 from keras.models import Sequential,Model
-from keras.layers import Embedding,Dropout,Bidirectional,Flatten,Dense,LSTM,TimeDistributed, Activation,Input,concatenate
+from keras.layers import Embedding,Dropout,Bidirectional,Flatten,Dense,LSTM,TimeDistributed, Activation,Input,merge,concatenate
 from keras.callbacks import ModelCheckpoint,CSVLogger
 from keras.layers import Conv1D, GlobalAveragePooling1D, MaxPooling1D
 from tensorflow.keras.optimizers import Adam

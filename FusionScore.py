@@ -144,12 +144,7 @@ for i in range(int(start), int(last) + 1):
             lines = [line]
             lastname = thisname
     samfile.close()
-    total = 0
-    skipped_na = 0
-    skipped_missing = 0
-    kept = 0
     for line in infile.readlines():
-        total += 1
         info = line.split('\t')
         gene1 = info[0]
         gene2 = info[1]
@@ -159,14 +154,6 @@ for i in range(int(start), int(last) + 1):
         splitcount = int(info[3])
         if splitcount + encompass == 0:
             continue
-        if gene1 == 'NA' or gene2 == 'NA':
-            skipped_na += 1
-            continue
-        if gene1 not in ExprDic or gene2 not in ExprDic:
-            skipped_missing += 1
-            continue
-            kept += 1
-
         splitreadinfo = info[6].split(';')
         splitreadinfo = list(set(splitreadinfo))        # remove duplication
         encmpscore = encompass
@@ -175,7 +162,6 @@ for i in range(int(start), int(last) + 1):
         try:
             scale1 = ExprDic[gene1]
             scale2 = ExprDic[gene2]
-            print(f"[{i}] Total fusions: {total}, Kept: {kept}, Skipped NA: {skipped_na}, Skipped Missing: {skipped_missing}", file=sys.stderr)
         except:
             sys.stderr.write('!!!' + gene1 + '\t' + gene2)
             continue
@@ -401,4 +387,3 @@ for line in templines:
     linedic[line] = score
 for key in sorted(linedic, key=linedic.__getitem__, reverse=True):
     print(key, end='')
-

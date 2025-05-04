@@ -140,7 +140,7 @@ if prefix == '.':
 # === ADDED: open auxiliary output for read → geneA, geneB mapping ===
 aux_output_path = filedir + '../ChiDist/' + prefix + 'readname_to_genes.txt'
 aux_out = open(aux_output_path, 'w')
-aux_out.write('read_name\tgeneA\tgeneB\n')
+aux_out.write('read_name\tgeneA\tgeneB\tchr1\tchr2\tpos1\tpos2\n')
 readfile = open(filedir + '../ChiDist/' + prefix + 'FusionRead.txt', 'w')
 # for finding reads near the brkpnts
 CandidateList = []
@@ -217,6 +217,13 @@ for i in range(int(start), int(last) + 1):
                     AddCount(gene2)
                     AddCount2(gene1)
                     AddCount2(gene2)
+                    # write readname, genes, chr and seq for 2-split fusions
+                    readinfo1, readinfo2 = info1, info2
+                    aux_out.write(
+                        f"{readinfo1[1]}\t{gene1}\t{gene2}\t"
+                        f"{readinfo1[3]}\t{readinfo2[3]}\t"
+                        f"{readinfo1[4]}\t{readinfo2[4]}\n"
+                    )
             elif len(lines) == 3:
                 info1 = lines[0].split('\t')
                 info2 = lines[1].split('\t')
@@ -234,6 +241,13 @@ for i in range(int(start), int(last) + 1):
                         AddCount2(gene2, 0.5)
                         AddCount2(gene3)
                         aux_out.write(f"{readinfo1[1]}\t{gene1}\t{gene2}\n")  # read name is readinfo1[1]
+                        # now write out readname, both genes, their chr and sequences
+                        readinfo1, readinfo2 = info1, info2
+                        aux_out.write(
+                            f"{readinfo1[1]}\t{gene1}\t{gene2}\t"
+                            f"{readinfo1[3]}\t{readinfo2[3]}\t"
+                            f"{readinfo1[4]}\t{readinfo2[4]}\n"
+                        )
                         readinfo1 = info1
                         readinfo2 = info2
                     elif info1[10] == info3[10] or info1[10] == ReverseComplement(info3[10]):
